@@ -2,6 +2,8 @@ from googlesearch import search
 from linecache import getline
 import urllib.request as ul
 from bs4 import BeautifulSoup as soup
+from loader import Loader
+from time import sleep
 import sys
 
 ##################
@@ -19,21 +21,36 @@ print("""
 """)
 
 
-query = input('Search -> ')
-print("Searching...\n")
+"""
+Requiring user input to make a Google search
+and show a little loading animation while looking for results.
+"""
+
+while True:
+    query = input('Search -> ')
+    
+    if query == '':
+        sys.stdout.write("\x1b[1A\x1b[2K") # deletes last printed string
+        continue
+    else:
+        break
+
+load = Loader("Searching...", "Search Complete.\n", 0.10).start()
 
 
 """
-Using the googlesearch module to search for results
-and making a file listing all the urls.
+Using the googlesearch module to search for results,
+write a file listing all the urls and stop the loading animation.
 """
 
 results = open('results.temp', 'w', encoding=enctype)
 
-for j in search(query, tld="co.in", num=numpages, stop=numpages):
-    results.write(f'{j}\n')
+for url in search(query, tld="co.in", num=numpages, stop=numpages):
+    results.write(f'{url}\n')
 
 results.close()
+
+load.stop()
 
 
 """
@@ -41,11 +58,18 @@ Printing each individual url from file
 with corresponding numbers.
 """
 
+# Links with corresponding numbers
 page_num = 0
-with open('results.temp') as file:
+with open('results.temp', 'r') as file:
     for line in file:
         page_num += 1
         print(f'{page_num} | {line.rstrip()}\n')
+
+# Number of links found
+with open('results.temp', 'r') as file:
+    for count, line in enumerate(file):
+        pass
+    print('Total Links: ', count + 1)
 
 
 """
@@ -57,13 +81,16 @@ while True:
     try:
         page_opt = int(input('Page number > '))
     except ValueError:
+        sys.stdout.write("\x1b[1A\x1b[2K")
         print("Please input the number of a page.")
+        sleep(1.5)
+        sys.stdout.write("\x1b[1A\x1b[2K")
         continue
     else:
         break
 
 page_opt_url = getline('results.temp', page_opt)
-print(page_opt_url)
+print(f"\n{page_opt_url}")
 
 
 """
@@ -77,10 +104,10 @@ html_page = ul.urlopen(req)
 soup = soup(html_page, "html.parser")
 html_text = soup.get_text()
 
-f = open("html_text.txt", "w", encoding=enctype)  # Creating html_text.txt File
+file = open("html_text.txt", "w", encoding=enctype)  # Creating html_text.txt File
 for line in html_text:
-    f.write(line)
-f.close()
+    file.write(line)
+file.close()
 
 
 """
@@ -90,3 +117,5 @@ and print the final result.
 
 finalrender = " ".join(html_text.split())
 print(finalrender)
+
+sys.exit()
