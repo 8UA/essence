@@ -37,7 +37,6 @@ while True:
 
 load = Loader("Searching...", "Search Complete.\n", 0.10).start()
 
-
 """
 Using the googlesearch module to search for results,
 write a file listing all the urls and stop the loading animation.
@@ -52,7 +51,6 @@ results.close()
 
 load.stop()
 
-
 """
 Printing each individual url from file
 with corresponding numbers.
@@ -60,14 +58,14 @@ with corresponding numbers.
 
 # Links with corresponding numbers
 page_num = 0
-with open('results.temp', 'r') as file:
-    for line in file:
+with open('results.temp', 'r') as f:
+    for line in f:
         page_num += 1
         print(f'{page_num} | {line.rstrip()}\n')
 
 # Number of links found
-with open('results.temp', 'r') as file:
-    for count, line in enumerate(file):
+with open('results.temp', 'r') as f:
+    for count, line in enumerate(f):
         pass
     print('Total Links: ', count + 1)
 
@@ -104,18 +102,18 @@ html_page = ul.urlopen(req)
 soup = soup(html_page, "html.parser")
 html_text = soup.get_text()
 
-file = open("html_text.txt", "w", encoding=enctype)  # Creating html_text.txt File
+f = open("html_text.txt", "w", encoding=enctype)  # Creating html_text.txt File
 for line in html_text:
-    file.write(line)
-file.close()
+    f.write(line)
+f.close()
 
 
 """
-Remove excessive space characters from the scraped text
-and print the final result.
+Print final result and exit program.
 """
 
-finalrender = " ".join(html_text.split())
-print(finalrender)
+with open("html_text.txt", "r", encoding=enctype) as f:
+    lines = f.read()
+    print(lines)
 
 sys.exit()
