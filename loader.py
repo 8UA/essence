@@ -1,8 +1,10 @@
 # from https://stackoverflow.com/a/66558182
+# i made just some small edits
 from itertools import cycle
 from shutil import get_terminal_size
 from threading import Thread
 from time import sleep
+import cursor # toggles terminal cursor visibility
 
 
 class Loader:
@@ -25,6 +27,7 @@ class Loader:
 
     def start(self):
         self._thread.start()
+        cursor.hide()
         return self
 
     def _animate(self):
@@ -42,6 +45,7 @@ class Loader:
         cols = get_terminal_size((80, 20)).columns
         print("\r" + " " * cols, end="", flush=True)
         print(f"\r{self.end}", flush=True)
+        cursor.show()
 
     def __exit__(self, exc_type, exc_value, tb):
         # handle exceptions with those variables ^
