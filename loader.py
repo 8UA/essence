@@ -46,10 +46,3 @@ class Loader:
     def __exit__(self, exc_type, exc_value, tb):
         # handle exceptions with those variables ^
         self.stop()
-
-
-if __name__ == "__main__":
-    loader = Loader("Searching...", "Search Complete.", 0.10).start()
-    for i in range(10):
-        sleep(0.25)
-    loader.stop()
